@@ -8,9 +8,10 @@ import {
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
 import { PaginationDto } from 'src/common/dtos';
+import { validate as isUUId } from 'uuid';
 
 @Injectable()
 export class ProductService {
@@ -47,10 +48,21 @@ export class ProductService {
     }
   }
 
-  async findOne(id: string) {
-    const product = await this.productRepository.findOneBy({ id });
-    if (!product)
-      throw new NotFoundException(`Product with id: "${id}" not found`);
+  async findOne(term: string) {
+    let product: Product | null = null;
+    if (isUUId(term)) {
+      product = await this.productRepository.findOneBy({ id: term });
+    } else {
+      const queryBuilder = this.productRepository.createQueryBuilder();
+      product = await queryBuilder
+        .where(`LOWER(title) =:title or slug =:slug`, {
+          title: term.toLowerCase(),
+          slug: term.toLowerCase(),
+        })
+        .getOne();
+    }
+
+    if (!product) throw new NotFoundException(`Product "${term}" not found`);
 
     return product;
   }
