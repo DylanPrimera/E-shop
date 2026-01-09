@@ -64,7 +64,7 @@ export class Product {
     this.slug = this.slug
       .toLocaleLowerCase()
       .replaceAll(' ', '-')
-      .replaceAll("'", '');
+      .replaceAll(/[^a-zA-Z0-9]/g, '');
   }
 
   @BeforeUpdate()
@@ -72,6 +72,6 @@ export class Product {
     this.slug = this.slug
       .toLocaleLowerCase()
       .replaceAll(' ', '-')
-      .replaceAll("'", '');
+      .replaceAll(/[^a-zA-Z0-9]/g, '');
   }
 }
