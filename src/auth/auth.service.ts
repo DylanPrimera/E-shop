@@ -84,7 +84,7 @@ export class AuthService {
     return token;
   }
 
-  private handleExceptions(error: any): never {
+  private handleExceptions(error: { code: string; detail: string }): never {
     if (error?.code === '23505') throw new BadRequestException(error?.detail);
     this.logger.error(error);
     throw new InternalServerErrorException(
