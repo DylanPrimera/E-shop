@@ -10,6 +10,7 @@ import { AuthService } from './auth.service';
 import { CreateUserDto, LoginDto } from './dto';
 import { AuthGuard } from '@nestjs/passport';
 import {
+  Auth,
   GetRawHeaders,
   GetUser,
   META_ROLES,
@@ -50,8 +51,7 @@ export class AuthController {
   }
 
   @Get('private2')
-  @RoleProtected(ValidRoles.admin, ValidRoles.superSu)
-  @UseGuards(AuthGuard(), UserRoleGuard)
+  @Auth(ValidRoles.admin, ValidRoles.superSu)
   testingPrivate2(@GetUser() user: User) {
     return {
       ok: true,
