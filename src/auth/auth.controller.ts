@@ -2,6 +2,8 @@ import { Controller, Post, Body, Get, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto, LoginDto } from './dto';
 import { AuthGuard } from '@nestjs/passport';
+import { GetRawHeaders, GetUser } from './decorators';
+import { User } from './entities/user.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -19,10 +21,17 @@ export class AuthController {
 
   @Get('private')
   @UseGuards(AuthGuard())
-  testingPrivate() {
+  testingPrivate(
+    @GetUser() user: User,
+    @GetUser('email') userEmail: string,
+    @GetRawHeaders() headers: string[],
+  ) {
     return {
       ok: true,
       message: 'hey',
+      user,
+      userEmail,
+      headers,
     };
   }
 }
