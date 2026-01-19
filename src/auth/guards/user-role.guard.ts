@@ -9,6 +9,12 @@ import {
 import { Observable } from 'rxjs';
 import { META_ROLES } from '../decorators';
 
+// Interfaces para tipado fuerte (crea estos o adáptalos a tu User/JwtPayload)
+interface UserPayload {
+  roles: string[];
+  fullName: string;
+}
+
 @Injectable()
 export class UserRoleGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
@@ -20,13 +26,18 @@ export class UserRoleGuard implements CanActivate {
       META_ROLES,
       context.getHandler(),
     );
-    if (!validRoles) return true;
-    if (validRoles.length === 0) return true;
-    const req = context.switchToHttp().getRequest();
-    const user = req.user;
-    const userRoles = user.roles;
+    if (!validRoles || validRoles.length === 0) {
+      return true;
+    }
 
-    if (!user) throw new BadRequestException('User not found (request guard)');
+    const req = context.switchToHttp().getRequest();
+    const user = req?.user as unknown as UserPayload | undefined;
+
+    if (!user) {
+      throw new BadRequestException('User not found (request guard)');
+    }
+
+    const userRoles: string[] = user.roles || [];
 
     for (const role of userRoles) {
       if (validRoles.includes(role)) {
@@ -35,7 +46,7 @@ export class UserRoleGuard implements CanActivate {
     }
 
     throw new ForbiddenException(
-      `User ${user.fullName.split(' ')[0]} doesn't have the permissions to access this route`,
+      `User ${user.fullName?.split(' ')[0] || 'unknown'} doesn't have the permissions to access this route`,
     );
   }
 }
