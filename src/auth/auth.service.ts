@@ -63,12 +63,26 @@ export class AuthService {
         roles: true,
       },
     });
+    const { password: _, ...userWithoutPassword } = user as any;
     if (!user) throw new UnauthorizedException('Invalid credentials');
 
     if (!bcrypt.compareSync(password, user.password))
       throw new UnauthorizedException('Invalid credentials');
 
     return {
+      user: userWithoutPassword,
+      token: this.generateJwt({
+        userId: user.id,
+        email: user.email,
+        fullName: user.fullName,
+        roles: user.roles,
+      }),
+    };
+  }
+
+  checkAuthStatus(user: User) {
+    return {
+      user,
       token: this.generateJwt({
         userId: user.id,
         email: user.email,
