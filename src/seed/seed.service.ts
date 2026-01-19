@@ -17,7 +17,7 @@ export class SeedService {
     await this.purgeDB();
     await this.insertUsers();
     await this.insertProducts();
-    return 'SEED EXCECUTED';
+    return 'SEED EXECUTED';
   }
 
   private async purgeDB() {

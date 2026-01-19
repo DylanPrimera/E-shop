@@ -1,3 +1,4 @@
+import * as bcrypt from 'bcrypt';
 interface SeedProduct {
   description: string;
   images: string[];
@@ -14,7 +15,7 @@ interface SeedProduct {
 type ValidSizes = 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL' | 'XXXL';
 type ValidTypes = 'shirts' | 'pants' | 'hoodies' | 'hats';
 
-const SEED_PASSWORD = 'Abc123';
+const SEED_PASSWORD = bcrypt.hashSync('Abc123', 10);
 const SEED_ROLES = ['admin'];
 
 interface SeedUser {
