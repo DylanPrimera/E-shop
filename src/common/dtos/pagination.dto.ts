@@ -3,7 +3,7 @@ import { IsOptional, IsPositive, Min } from 'class-validator';
 
 export class PaginationDto {
   @ApiProperty({
-    example: 10,
+    default: 5,
     description: 'Max number of items to return',
   })
   @IsOptional()
@@ -12,7 +12,7 @@ export class PaginationDto {
   limit?: number;
 
   @ApiProperty({
-    example: 0,
+    default: 0,
     description: 'Number of items to skip (min 0)',
   })
   @IsOptional()
