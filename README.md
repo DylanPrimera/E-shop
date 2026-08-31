@@ -11,20 +11,19 @@ pnpm i -g @nestjs/cli
 3. Run 
 ``` 
 pnpm install
+
 ```
-4. Setup the DB
+4. Clone the file ```.env.template``` and rename the copy for ```.env```
+5. Fill the enviroment variables defined in the ```.env``` file
+6. Setup the DB
 ```
 docker compose -f docker-compose.yaml up -d
 ```
-5. Clone the file ```.env.template``` and rename the copy for ```.env```
-
-6. Fill the enviroment variables defined in the ```.env``` file
-
 7. Run the API with
 ```
 pnpm start:dev
 ```
-8. Run seed
+8. Run seed on postman
 ```
 localhost:3000/api/v1/seed
 ```
