@@ -60,3 +60,5 @@ postgres/
 pnpm-lock.yaml
 
 static/
+
+tsconfig.build.tsbuildinfo

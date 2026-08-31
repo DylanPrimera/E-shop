@@ -33,11 +33,6 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     SeedModule,
     CommonModule,
     AuthModule,
-    ObserveModule.forRoot({
-      appKey: process.env.OBSERVE_APP_KEY!,
-      appSecret: process.env.OBSERVE_APP_SECRET!,
-      serviceId: 'e-shop',
-    }),
   ],
   controllers: [AppController],
   providers: [AppService],
