@@ -3,17 +3,20 @@ import { IsOptional, IsPositive, Min } from 'class-validator';
 
 export class PaginationDto {
   @ApiProperty({
-    default: 5,
+    default: 10,
+    required: false,
     description: 'Max number of items to return',
+    example: 10,
   })
   @IsOptional()
   @IsPositive()
-  // @Type(() => Number) para transformar el valor desde el DTO
   limit?: number;
 
   @ApiProperty({
     default: 0,
-    description: 'Number of items to skip (min 0)',
+    required: false,
+    description: 'Number of items to skip (offset)',
+    example: 0,
   })
   @IsOptional()
   @Min(0)

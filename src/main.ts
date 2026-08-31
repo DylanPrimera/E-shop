@@ -22,8 +22,9 @@ async function bootstrap() {
   );
   const config = new DocumentBuilder()
     .setTitle('E Shop RESTful API')
-    .setDescription('E shop entire endpoints')
+    .setDescription('E-Shop endpoints documentation and testing')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, documentFactory);

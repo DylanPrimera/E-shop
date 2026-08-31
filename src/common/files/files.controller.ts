@@ -8,7 +8,14 @@ import {
   Param,
   Res,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FilesService } from './files.service';
 import { diskStorage } from 'multer';
@@ -25,6 +32,21 @@ export class FilesController {
   ) {}
 
   @Get('product/:imageName')
+  @ApiOperation({ summary: 'Get a product image by filename' })
+  @ApiParam({
+    name: 'imageName',
+    description:
+      'Image file name with extension (e.g. 1740176-00-A_0_2000.jpg)',
+    example: '1740176-00-A_0_2000.jpg',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns the requested image file',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Image not found',
+  })
   findProductImage(
     @Res() res: Response,
     @Param('imageName') imageName: string,
@@ -34,6 +56,40 @@ export class FilesController {
   }
 
   @Post('product')
+  @ApiOperation({ summary: 'Upload a product image file' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Product image file (jpg, jpeg, png - max 5MB)',
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+          description: 'Image file to upload',
+        },
+      },
+      required: ['file'],
+    },
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'File uploaded successfully, returns secure public URL',
+    schema: {
+      type: 'object',
+      properties: {
+        secureUlr: {
+          type: 'string',
+          example:
+            'http://localhost:3000/api/v1/files/product/d5c2be6d-2e23-41bb-83df-211ff12e2c04.jpg',
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request (file missing or invalid format)',
+  })
   @UseInterceptors(
     FileInterceptor('file', {
       fileFilter: fileFilter,

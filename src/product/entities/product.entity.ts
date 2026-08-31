@@ -98,12 +98,22 @@ export class Product {
   })
   tags: string[];
 
+  @ApiProperty({
+    description: 'Product associated images',
+    type: () => [ProductImage],
+    required: false,
+  })
   @OneToMany(() => ProductImage, (productImage) => productImage.product, {
     cascade: true,
     eager: true,
   })
   images?: ProductImage[];
 
+  @ApiProperty({
+    description: 'User who created/manages this product',
+    type: () => User,
+    required: false,
+  })
   @ManyToOne(() => User, (user) => user.product, {
     eager: true,
   })
