@@ -12,12 +12,13 @@ import {
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { PaginationDto } from 'src/common/dtos';
-import { Auth, GetUser } from 'src/auth/decorators';
-import { User } from 'src/auth/entities/user.entity';
+import { PaginationDto } from '../common/dtos';
+import { Auth, GetUser } from '../auth/decorators';
+import { User } from '../auth/entities/user.entity';
+import { ValidRoles } from '../auth/interfaces';
 
 @Controller('product')
-@Auth()
+@Auth(ValidRoles.admin)
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 

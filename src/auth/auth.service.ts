@@ -16,6 +16,11 @@ import * as bcrypt from 'bcrypt';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { JwtService } from '@nestjs/jwt';
 
+interface ExceptionError {
+  code: string;
+  detail: string;
+}
+
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger('AuthService');
@@ -46,7 +51,7 @@ export class AuthService {
         }),
       };
     } catch (error) {
-      this.handleExceptions(error);
+      this.handleExceptions(error as ExceptionError);
     }
   }
 
@@ -64,6 +69,7 @@ export class AuthService {
       },
     });
     const { password: _, ...userWithoutPassword } = user as any;
+
     if (!user) throw new UnauthorizedException('Invalid credentials');
 
     if (!bcrypt.compareSync(password, user.password))
@@ -94,11 +100,10 @@ export class AuthService {
 
   private generateJwt(payload: JwtPayload) {
     const token = this.jwtService.sign(payload);
-
     return token;
   }
 
-  private handleExceptions(error: { code: string; detail: string }): never {
+  private handleExceptions(error: ExceptionError): never {
     if (error?.code === '23505') throw new BadRequestException(error?.detail);
     this.logger.error(error);
     throw new InternalServerErrorException(

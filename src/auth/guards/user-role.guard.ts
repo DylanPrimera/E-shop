@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Reflector } from '@nestjs/core';
 import {
   BadRequestException,
@@ -9,7 +11,6 @@ import {
 import { Observable } from 'rxjs';
 import { META_ROLES } from '../decorators';
 
-// Interfaces para tipado fuerte (crea estos o adáptalos a tu User/JwtPayload)
 interface UserPayload {
   roles: string[];
   fullName: string;
@@ -46,7 +47,7 @@ export class UserRoleGuard implements CanActivate {
     }
 
     throw new ForbiddenException(
-      `User ${user.fullName?.split(' ')[0] || 'unknown'} doesn't have the permissions to access this route`,
+      `User ${user?.fullName || 'unknown'} doesn't have the permissions to access this route`,
     );
   }
 }

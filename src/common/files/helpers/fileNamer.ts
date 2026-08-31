@@ -10,7 +10,6 @@ export const fileNamer = (
   if (!file) return callback(new Error('File is empty'), false);
 
   const fileExtension = file.mimetype.split('/')[1];
-  //   const originalFileName = file.originalname.split('.')[0];
   const fileName = `${uuid()}.${fileExtension}`;
 
   callback(null, fileName);

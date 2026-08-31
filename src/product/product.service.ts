@@ -24,7 +24,7 @@ export class ProductService {
     private readonly productRepository: Repository<Product>,
     @InjectRepository(ProductImage)
     private readonly productImageRepository: Repository<ProductImage>,
-    private readonly dataSource: DataSource,
+    private readonly dataSource: DataSource, //Object that knows connection chain of our DB
   ) {}
 
   async findAll(paginationDto: PaginationDto) {
@@ -37,9 +37,9 @@ export class ProductService {
           images: true,
         },
       });
-      return products.map((product) => ({
+      return products.map(({ images, ...product }) => ({
         ...product,
-        images: product?.images?.map((img) => img?.url),
+        images: images?.map((img) => img.url),
       }));
     } catch (error) {
       this.handleExceptions(error);
@@ -95,15 +95,16 @@ export class ProductService {
   }
 
   async update(id: string, updateProductDto: UpdateProductDto, user: User) {
-    const { images, ...toUpdate } = updateProductDto;
+    const { images, ...dataToUpdate } = updateProductDto;
 
     const product = await this.productRepository.preload({
       id,
-      ...toUpdate,
+      ...dataToUpdate,
       user,
     });
 
-    if (!product) throw new NotFoundException(`Product id "${id}" not found`);
+    if (!product)
+      throw new NotFoundException(`Product with id "${id}" not found`);
 
     // Create query runner
     const queryRunner = this.dataSource.createQueryRunner();
@@ -140,7 +141,8 @@ export class ProductService {
   async deleteAllProducts() {
     const query = this.productRepository.createQueryBuilder('product');
     try {
-      return await query.delete().where({}).execute();
+      await query.delete().where({}).execute();
+      return 'All products deleted successfully';
     } catch (error) {
       this.handleExceptions(error);
     }
