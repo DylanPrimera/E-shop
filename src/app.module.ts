@@ -9,6 +9,9 @@ import { CommonModule } from './common/common.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
+import { createObserveModule } from '@nestjs/observe';
+
+export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
 @Module({
   imports: [
@@ -30,6 +33,11 @@ import { AuthModule } from './auth/auth.module';
     SeedModule,
     CommonModule,
     AuthModule,
+    ObserveModule.forRoot({
+      appKey: process.env.OBSERVE_APP_KEY!,
+      appSecret: process.env.OBSERVE_APP_SECRET!,
+      serviceId: 'e-shop',
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
