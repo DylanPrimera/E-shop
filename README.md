@@ -13,7 +13,7 @@ pnpm i -g @nestjs/cli
 pnpm install
 
 ```
-4. Clone the file ```.env.template``` and rename the copy for ```.env```
+4. Clone ```.env.template``` and rename the copy for ```.env```
 5. Fill the enviroment variables defined in the ```.env``` file
 6. Setup the DB
 ```
