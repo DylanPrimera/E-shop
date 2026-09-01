@@ -141,7 +141,7 @@ export class ProductService {
   async deleteAllProducts() {
     const query = this.productRepository.createQueryBuilder('product');
     try {
-      await query.delete().where({}).execute();
+      await query.delete().execute();
       return 'All products deleted successfully';
     } catch (error) {
       this.handleExceptions(error);
