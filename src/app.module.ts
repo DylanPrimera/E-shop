@@ -10,6 +10,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
 import { createObserveModule } from '@nestjs/observe';
+import { MessagesWsModule } from './messages-ws/messages-ws.module';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -33,6 +34,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     SeedModule,
     CommonModule,
     AuthModule,
+    MessagesWsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
