@@ -27,3 +27,7 @@ pnpm start:dev
 ```
 localhost:3000/api/v1/seed
 ```
+
+# Web socket client
+
+If you want to test locally the websocket feature go to ```https://github.com/DylanPrimera/websocket-client``` and follow the instructions
