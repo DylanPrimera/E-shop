@@ -17,7 +17,7 @@ pnpm install
 5. Fill the enviroment variables defined in the ```.env``` file
 6. Setup the DB
 ```
-docker compose -f docker-compose.yaml up -d
+docker compose up -d
 ```
 7. Run the API with
 ```
