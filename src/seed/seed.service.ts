@@ -23,7 +23,7 @@ export class SeedService {
   private async purgeDB() {
     await this.productService.deleteAllProducts();
     const queryBuilder = this.userRepository.createQueryBuilder();
-    await queryBuilder.delete().where({}).execute();
+    await queryBuilder.delete().execute();
   }
 
   private async insertUsers() {
